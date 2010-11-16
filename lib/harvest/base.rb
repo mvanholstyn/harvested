@@ -254,5 +254,9 @@ module Harvest
     def reports
       @reports ||= Harvest::API::Reports.new(credentials)
     end
+
+    def invoices
+      @invoices ||= Harvest::API::Invoices.new(credentials)
+    end
   end
 end
