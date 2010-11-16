@@ -33,9 +33,9 @@ module Harvest
     element :tax, Float
     element :tax2, Float
     element :tax_amount, Float, :tag => "tax-amount"
-    # TODO: tax_amount2 is not getting populated
-    element :tax_amount2, Float, :tag => "tax-amount2"
+    element :tax2_amount, Float, :tag => "tax2-amount"
     element :updated_at, Time, :tag => "updated-at"
     element :created_at, Time, :tag => "created-at"
+    element :csv_line_items, String, :tag => "csv-line-items"
   end
 end

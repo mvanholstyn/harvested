@@ -137,6 +137,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<httparty>, [">= 0"])
       s.add_runtime_dependency(%q<happymapper>, [">= 0"])
       s.add_runtime_dependency(%q<builder>, [">= 0"])
+      s.add_runtime_dependency(%q<fastercsv>, [">= 0"])
     else
       s.add_dependency(%q<rspec>, [">= 1.2.9"])
       s.add_dependency(%q<cucumber>, [">= 0"])
@@ -154,6 +155,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<httparty>, [">= 0"])
     s.add_dependency(%q<happymapper>, [">= 0"])
     s.add_dependency(%q<builder>, [">= 0"])
+    s.add_dependency(%q<fastercsv>, [">= 0"])
   end
 end
 
