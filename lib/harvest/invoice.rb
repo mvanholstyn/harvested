@@ -19,17 +19,23 @@ module Harvest
     element :id, Integer
     element :amount, Float
     element :due_amount, Float, :tag => "due-amount"
+    element :discount_amount, Float, :tag => "discount-amount"
     element :due_at, Time, :tag => "due-at"
     element :due_at_human_format, String, :tag => "due-at-human-format"
     element :period_end, Date, :tag => "period-end"
     element :period_start, Date, :tag => "period-start"
     element :client_id, Integer, :tag => "client-id"
+    element :retainer_id, Integer, :tag => "retainer-id"
+    element :estimate_id, Integer, :tag => "estimate-id"
+    element :recurring_invoice_id, Integer, :tag => "recurring-invoice-id"
     element :currency, String
     element :issued_at, Date, :tag => "issued-at"
+    element :subject, String
     element :notes, String
     element :number, String
     element :purchase_order, String, :tag => "purchase-order"
     element :state, String
+    element :discount, Float
     element :tax, Float
     element :tax2, Float
     element :tax_amount, Float, :tag => "tax-amount"
