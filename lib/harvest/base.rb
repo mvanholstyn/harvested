@@ -262,5 +262,9 @@ module Harvest
     def invoices
       @invoices ||= Harvest::API::Invoices.new(credentials)
     end
+    
+    def invoice_payments
+      @invoice_payments ||= Harvest::API::InvoicePayments.new(credentials)
+    end
   end
 end
