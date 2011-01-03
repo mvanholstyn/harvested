@@ -33,6 +33,7 @@ module Harvest
     element :subject, String
     element :notes, String
     element :number, String
+    element :kind, String
     element :purchase_order, String, :tag => "purchase-order"
     element :state, String
     element :discount, Float
