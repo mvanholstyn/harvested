@@ -12,7 +12,7 @@ module Harvest
       end
       
       def create(invoice_payment)
-        response = request(:post, credentials, "/invoices/#{invoice_payment.invoice_id}/payments", :body => invoice_payment.user_xml)
+        response = request(:post, credentials, "/invoices/#{invoice_payment.invoice_id}/payments", :body => invoice_payment.to_xml)
         id = response.headers["location"].first.match(/\/.*\/(\d+)\/.*\/(\d+)/)[2]
         find(invoice_payment.invoice_id, id)
       end
