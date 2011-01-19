@@ -70,7 +70,7 @@ module Harvest
           seconds = if @client.account.rate_limit_status.over_limit?
             16
           else
-            3 # to try to reduce 'Harvest::Unavailable' errors
+            16 # to try to reduce 'Harvest::Unavailable' errors
           end
           sleep(seconds)
           retry if would_retry
