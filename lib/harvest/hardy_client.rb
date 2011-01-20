@@ -66,14 +66,11 @@ module Harvest
           sleep(seconds)
           retry
         rescue Harvest::Unavailable, Harvest::InformHarvest => e
-          would_retry = retry_func.call(e)
-          seconds = if @client.account.rate_limit_status.over_limit?
-            16
-          else
-            16 * retries # to try to reduce 'Harvest::Unavailable' errors
+          if would_retry = retry_func.call(e)
+            # to try to reduce 'Harvest::Unavailable' errors
+            sleep(16 * retries)
+            retry
           end
-          sleep(seconds)
-          retry if would_retry
         rescue Net::HTTPError, Net::HTTPFatalError => e
           retry if retry_func.call(e)
         rescue SystemCallError => e
