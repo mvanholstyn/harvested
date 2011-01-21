@@ -102,7 +102,6 @@ Gem::Specification.new do |s|
      "spec/harvest/time_entry_spec.rb",
      "spec/harvest/user_assignment_spec.rb",
      "spec/harvest/user_spec.rb",
-     "spec/spec.default.opts",
      "spec/spec_helper.rb"
   ]
   s.homepage = %q{http://github.com/zmoazeni/harvested}
