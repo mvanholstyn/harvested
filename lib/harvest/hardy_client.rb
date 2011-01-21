@@ -14,18 +14,18 @@ module Harvest
         END
       end
     end
-    
+
     def __getobj__; @_sd_obj; end
     def __setobj__(obj); @_sd_obj = obj; end
-    
+
     def wrap_collection
       collection = yield
       HardyCollection.new(collection, self, @max_retries)
     end
-    
+
     class HardyCollection < Delegator
       attr_accessor :sleep_increment
-      
+
       def initialize(collection, client, max_retries, sleep_increment=16)
         super(collection)
         @sleep_increment = sleep_increment
@@ -36,19 +36,20 @@ module Harvest
           instance_eval <<-END
             def #{name}(*args)
               retry_rate_limits do
+                puts "--[harvest] Updated Gem"
                 @collection.send('#{name}', *args)
               end
             end
           END
         end
       end
-      
+
       def __getobj__; @_sd_obj; end
       def __setobj__(obj); @_sd_obj = obj; end
-      
+
       def retry_rate_limits
         retries = 0
-        
+
         retry_func = lambda do |e|
           if retries < @max_retries
             retries += 1
@@ -57,7 +58,7 @@ module Harvest
             raise e
           end
         end
-        
+
         begin
           yield
         rescue Harvest::RateLimited, Harvest::Unavailable => e
