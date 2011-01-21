@@ -24,8 +24,11 @@ module Harvest
     end
     
     class HardyCollection < Delegator
-      def initialize(collection, client, max_retries)
+      attr_accessor :sleep_increment
+      
+      def initialize(collection, client, max_retries, sleep_increment=16)
         super(collection)
+        @sleep_increment = sleep_increment
         @_sd_obj = @collection = collection
         @client = client
         @max_retries = max_retries
@@ -57,18 +60,23 @@ module Harvest
         
         begin
           yield
-        rescue Harvest::RateLimited => e
+        rescue Harvest::RateLimited, Harvest::Unavailable => e
           seconds = if e.response.headers["retry-after"]
             e.response.headers["retry-after"].first.to_i
           else
-            16
+            @sleep_increment*(retries+1)
           end
-          sleep(seconds)
-          retry
-        rescue Harvest::Unavailable, Harvest::InformHarvest => e
+
           if would_retry = retry_func.call(e)
-            # to try to reduce 'Harvest::Unavailable' errors
-            sleep(16 * retries)
+            puts "---[harvest] Sleeping for #{seconds} seconds"
+            sleep(seconds)
+            retry
+          end
+        rescue Harvest::InformHarvest => e
+          if would_retry = retry_func.call(e)
+            seconds = @sleep_increment * retries
+            puts "---[harvest] Sleeping for #{seconds} seconds"
+            sleep(seconds)
             retry
           end
         rescue Net::HTTPError, Net::HTTPFatalError => e
