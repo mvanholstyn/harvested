@@ -36,7 +36,6 @@ module Harvest
           instance_eval <<-END
             def #{name}(*args)
               retry_rate_limits do
-                puts "--[harvest] Updated Gem"
                 @collection.send('#{name}', *args)
               end
             end

@@ -20,9 +20,7 @@ module Harvest
       protected
         def request(method, credentials, path, options = {})
           puts '---[harvest] ' + path
-
           response = HTTParty.send(method, "#{credentials.host}#{path}", :query => options[:query], :body => options[:body], :headers => {"Accept" => "application/xml", "Content-Type" => "application/xml; charset=utf-8", "Authorization" => "Basic #{credentials.basic_auth}", "User-Agent" => "Harvestable/#{Harvest::VERSION}"}.update(options[:headers] || {}), :format => :plain)
-
           puts '---[harvest] -- ' + response.code.to_s
 
           case response.code
