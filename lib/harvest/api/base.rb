@@ -1,6 +1,8 @@
 module Harvest
   module API
     class Base
+      MODULE_PATHS = /^(\/invoices|\/expenses|\/expense_categories)/
+
       attr_reader :credentials
       
       def initialize(credentials)
@@ -29,7 +31,11 @@ module Harvest
           when 400
             raise Harvest::BadRequest.new(response)
           when 404
-            raise Harvest::NotFound.new(response)
+            if MODULE_PATHS.match(path)
+              raise Harvest::ModuleDisabled.new(response)
+            else
+              raise Harvest::NotFound.new(response)
+            end
           when 500
             raise Harvest::ServerError.new(response)
           when 502

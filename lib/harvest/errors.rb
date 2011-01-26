@@ -16,6 +16,7 @@ module Harvest
   
   class RateLimited < HTTPError; end
   class NotFound < HTTPError; end
+  class ModuleDisabled < HTTPError; end
   class Unavailable < HTTPError; end
   class InformHarvest < HTTPError; end
   class BadRequest < HTTPError; end

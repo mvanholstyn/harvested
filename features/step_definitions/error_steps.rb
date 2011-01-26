@@ -17,6 +17,25 @@ Given /^the next request will receive a (bad request|not found|bad gateway|serve
   end
 end
 
+Given /^the next request to (\/.+) will receive a (bad request|not found|bad gateway|server error|rate limit) response$/ do |path, type|
+  statuses = {
+    'bad request' => ['400', 'Bad Request'],
+    'not found' => ['404', 'Not Found'],
+    'bad gateway' => ['502', 'Bad Gateway'],
+    'server error' => ['500', 'Server Error'],
+    'rate limit' => ['503', 'Rate Limited']
+  }
+    
+  if status = statuses[type]
+    FakeWeb.register_uri(:get, Regexp.new(path), [
+      {:status => status, :times => 1},
+      {:body => File.read(File.dirname(__FILE__) + '/../support/fixtures/empty_clients.xml')}
+    ])
+  else
+    pending
+  end
+end
+
 Given /^the next request will receive a rate limit response with a refresh in (\d+) seconds$/ do |seconds|
   FakeWeb.register_uri(:get, /\/clients/, [
     {:status => ['503', 'Rake Limited'], "Retry-After" => seconds},
@@ -37,6 +56,24 @@ When 'I make a request with the standard client' do
   end
 end
 
+When 'I make a request with the standard client to invoices' do
+  set_time_and_return_and_error do
+    standard_api.invoices.all
+  end
+end
+
+When 'I make a request with the standard client to expense_categories' do
+  set_time_and_return_and_error do
+    standard_api.expense_categories.all
+  end
+end
+
+When 'I make a request with the standard client to expenses' do
+  set_time_and_return_and_error do
+    standard_api.expenses.all
+  end
+end
+
 When 'I make a request with the hardy client' do
   set_time_and_return_and_error do
     harvest_api.clients.all
@@ -50,7 +87,7 @@ When /^I make a request with the hardy client with (\d+) max retries$/ do |times
   end
 end
 
-Then /a (\d+) error should be raised/ do |code|
+Then /a ([^"]*) error should be raised/ do |code|
   case code
   when '400'
     @error.should be_a(Harvest::BadRequest)
@@ -62,6 +99,8 @@ Then /a (\d+) error should be raised/ do |code|
     @error.should be_a(Harvest::ServerError)
   when '503'
     @error.should be_a(Harvest::RateLimited)
+  when 'ModuleDisabled'
+    @error.should be_a(Harvest::ModuleDisabled)
   else
     pending
   end
