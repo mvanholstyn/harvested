@@ -1,7 +1,7 @@
 module Harvest
   module API
     class Base
-      MODULE_PATHS = /^(\/invoices|\/expenses|\/expense_categories)/
+      MODULE_PATHS = /^(\/invoices|\/invoice_item_categories|\/expenses|\/expense_categories)/
 
       attr_reader :credentials
       

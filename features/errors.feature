@@ -27,6 +27,10 @@ Feature: Handling Harvest Errors
     Given the next request to /invoices will receive a not found response
     When I make a request with the standard client to invoices
     Then a ModuleDisabled error should be raised
+    
+    Given the next request to /invoice_item_categories will receive a not found response
+    When I make a request with the standard client to invoice_categories
+    Then a ModuleDisabled error should be raised
 
     Given the next request to /expenses will receive a not found response
     When I make a request with the standard client to expenses

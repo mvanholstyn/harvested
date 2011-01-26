@@ -62,6 +62,12 @@ When 'I make a request with the standard client to invoices' do
   end
 end
 
+When 'I make a request with the standard client to invoice_categories' do
+  set_time_and_return_and_error do
+    standard_api.invoice_categories.all
+  end
+end
+
 When 'I make a request with the standard client to expense_categories' do
   set_time_and_return_and_error do
     standard_api.expense_categories.all
