@@ -6,6 +6,11 @@ module Harvest
         response = request(:get, credentials, "/daily/show/#{id}")
         Harvest::TimeEntry.parse(response.body, :single => true)
       end
+
+      def find_for_user(user_id, id)
+        response = request(:get, credentials, "/daily/show/#{id}?of_user=#{user_id}")
+        Harvest::TimeEntry.parse(response.body, :single => true)
+      end
       
       def all(date = ::Time.now)
         date = ::Time.parse(date) if String === date
