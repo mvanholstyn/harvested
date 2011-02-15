@@ -84,11 +84,14 @@ module Harvest
           retry if e.is_a?(Errno::ECONNRESET) && retry_func.call(e)
         rescue Exception => e
           if e.message.match(/execution expired/)
-            puts "--[harvest] Execution Expired, sleeping for 60 seconds"
-            sleep(60)
-            retry
-          else
-            raise e
+            if would_retry = retry_func.call(e)
+              seconds = @sleep_increment * retries
+              puts "--[harvest] Execution Expired, sleeping for #{seconds} seconds"
+              sleep(seconds)
+              retry
+            else
+              raise e
+            end
           end
         end
       end
