@@ -13,7 +13,7 @@ require 'harvest/timezones'
 require 'harvest/base'
 
 %w(crud activatable).each {|a| require "harvest/behavior/#{a}"}
-%w(base_model client contact project task user rate_limit_status task_assignment user_assignment expense_category expense time_entry invoice_category invoice line_item invoice_payment).each {|a| require "harvest/#{a}"}
+%w(base_model client contact project task user rate_limit_status who_am_i task_assignment user_assignment expense_category expense time_entry invoice_category invoice line_item invoice_payment).each {|a| require "harvest/#{a}"}
 %w(base account clients contacts projects tasks users task_assignments user_assignments expense_categories expenses time reports invoice_categories invoices invoice_payments).each {|a| require "harvest/api/#{a}"}
 
 module Harvest
