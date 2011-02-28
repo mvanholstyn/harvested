@@ -19,5 +19,7 @@ module Harvest
     element :timestamp_timers, Boolean, :tag => 'timestamp-timers'
     element :admin, Boolean
     element :id, Integer
+
+    alias_method :admin?, :admin
   end
 end
