@@ -92,6 +92,8 @@ module Harvest
             else
               raise e
             end
+          else
+            raise e
           end
         end
       end
