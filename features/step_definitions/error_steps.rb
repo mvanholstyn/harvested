@@ -6,7 +6,7 @@ Given /^the next request will receive a (bad request|not found|bad gateway|serve
     'server error' => ['500', 'Server Error'],
     'rate limit' => ['503', 'Rake Limited']
   }
-  
+
   if status = statuses[type]
     FakeWeb.register_uri(:get, /\/clients/, [
       {:status => status, :times => 1},
@@ -25,7 +25,7 @@ Given /^the next request to (\/.+) will receive a (bad request|not found|bad gat
     'server error' => ['500', 'Server Error'],
     'rate limit' => ['503', 'Rate Limited']
   }
-    
+
   if status = statuses[type]
     FakeWeb.register_uri(:get, Regexp.new(path), [
       {:status => status, :times => 1},
@@ -93,7 +93,7 @@ When /^I make a request with the hardy client with (\d+) max retries$/ do |times
   end
 end
 
-Then /a ([^"]*) error should be raised/ do |code|
+Then /^a "([^\"]*)" error should be raised$/ do |code|
   case code
   when '400'
     @error.should be_a(Harvest::BadRequest)
@@ -105,8 +105,10 @@ Then /a ([^"]*) error should be raised/ do |code|
     @error.should be_a(Harvest::ServerError)
   when '503'
     @error.should be_a(Harvest::RateLimited)
-  when 'ModuleDisabled'
-    @error.should be_a(Harvest::ModuleDisabled)
+  when 'ModuleDisabled::Invoices'
+    @error.should be_a(Harvest::ModuleDisabled::Invoices)
+  when 'ModuleDisabled::ExpenseTracking'
+    @error.should be_a(Harvest::ModuleDisabled::ExpenseTracking)
   else
     pending
   end

@@ -4,11 +4,11 @@ module Harvest
       MODULE_PATHS = /^(\/invoices|\/invoice_item_categories|\/expenses|\/expense_categories)/
 
       attr_reader :credentials
-      
+
       def initialize(credentials)
         @credentials = credentials
       end
-      
+
       class << self
         def api_model(klass)
           class_eval <<-END
@@ -18,7 +18,7 @@ module Harvest
           END
         end
       end
-      
+
       protected
         def request(method, credentials, path, options = {})
           puts '---[Harvest] ' + path
@@ -35,8 +35,8 @@ module Harvest
           when 400
             raise Harvest::BadRequest.new(response, params)
           when 404
-            if MODULE_PATHS.match(path)
-              raise Harvest::ModuleDisabled.new(response, params)
+            if Harvest::ModuleDisabled.module_disabled?(path)
+              raise Harvest::ModuleDisabled.build(path, response, params)
             else
               raise Harvest::NotFound.new(response, params)
             end
