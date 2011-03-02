@@ -89,8 +89,6 @@ module Harvest
               puts "--[harvest] Execution Expired, sleeping for #{seconds} seconds"
               sleep(seconds)
               retry
-            else
-              raise e
             end
           else
             raise e
