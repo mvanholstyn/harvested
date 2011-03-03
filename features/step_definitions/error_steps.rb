@@ -4,7 +4,7 @@ Given /^the next request will receive a (bad request|not found|bad gateway|serve
     'not found' => ['404', 'Not Found'],
     'bad gateway' => ['502', 'Bad Gateway'],
     'server error' => ['500', 'Server Error'],
-    'rate limit' => ['503', 'Rake Limited']
+    'rate limit' => ['503', 'Rate Limited']
   }
 
   if status = statuses[type]
@@ -27,7 +27,13 @@ Given /^the next request to (\/.+) will receive a (bad request|not found|bad gat
   }
 
   if status = statuses[type]
-    FakeWeb.register_uri(:get, Regexp.new(path), [
+    if path.match(/invoices/)
+      regex = Regexp.new(path + "$")
+    else
+      regex = Regexp.new(path)
+    end
+
+    FakeWeb.register_uri(:get, regex, [
       {:status => status, :times => 1},
       {:body => File.read(File.dirname(__FILE__) + '/../support/fixtures/empty_clients.xml')}
     ])
@@ -59,6 +65,12 @@ end
 When 'I make a request with the standard client to invoices' do
   set_time_and_return_and_error do
     standard_api.invoices.all
+  end
+end
+
+When /^I make a request with the standard client to a specific invoice (\d+)$/ do |invoice_number|
+  set_time_and_return_and_error do
+    standard_api.invoices.find(invoice_number)
   end
 end
 

@@ -28,6 +28,10 @@ Feature: Handling Harvest Errors
     When I make a request with the standard client to invoices
     Then a "ModuleDisabled::Invoices" error should be raised
 
+    Given the next request to /invoices/9001 will receive a not found response
+    When I make a request with the standard client to a specific invoice 9001
+    Then a "404" error should be raised
+
     Given the next request to /invoice_item_categories will receive a not found response
     When I make a request with the standard client to invoice_categories
     Then a "ModuleDisabled::Invoices" error should be raised

@@ -21,7 +21,7 @@ module Harvest
   class NotFound < HTTPError; end
 
   module ModuleDisabled
-    MODULE_PATHS = /^(\/invoices|\/invoice_item_categories|\/expenses|\/expense_categories)/
+    MODULE_PATHS = /^(\/invoices$|\/invoice_item_categories|\/expenses|\/expense_categories)/
 
     class Invoices < HTTPError; end
     class ExpenseTracking < HTTPError; end
