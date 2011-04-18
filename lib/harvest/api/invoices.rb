@@ -5,6 +5,17 @@ module Harvest
 
       include Harvest::Behavior::Crud
 
+      def all
+        invoices, last_set, page = [], [], 1
+        begin
+          response = request(:get, credentials, api_model.api_path + "?page=#{page}")
+          last_set = api_model.parse(response.body)
+          invoices += last_set
+          page += 1
+        end until last_set.length != 50
+        invoices
+      end
+
       # TODO: Document
       def line_items(invoice)
         invoice_with_line_items = find(invoice.id)
