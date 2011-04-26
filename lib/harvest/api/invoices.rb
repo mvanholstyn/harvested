@@ -5,10 +5,22 @@ module Harvest
 
       include Harvest::Behavior::Crud
 
-      def all
+      def all(options = {})
+        options = options.dup
+        if options[:from]
+          options[:from] = options[:from].strftime("%Y%m%d")
+          if options[:to].nil?
+            options[:to] = Date.new(2999, 12, 31)
+          end
+        end
+        if options[:to]
+          options[:to] = options[:to].strftime("%Y%m%d")
+        end
+
         invoices, last_set, page = [], [], 1
         begin
-          response = request(:get, credentials, api_model.api_path + "?page=#{page}")
+          options[:page] = page
+          response = request(:get, credentials, api_model.api_path, :query => options)
           last_set = api_model.parse(response.body)
           invoices += last_set
           page += 1

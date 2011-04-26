@@ -19,7 +19,8 @@ module Harvest
 
       protected
         def request(method, credentials, path, options = {})
-          puts '---[Harvest] ' + path
+          query = options[:query] || {}
+          puts '---[Harvest] ' + path + ' ' + query.map { |k,v| "#{k}=#{v}" }.join("&")
           params = {}
           params[:path] = path
           params[:options] = options
