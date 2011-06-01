@@ -83,7 +83,7 @@ module Harvest
         rescue SystemCallError => e
           retry if e.is_a?(Errno::ECONNRESET) && retry_func.call(e)
         rescue Exception => e
-          if e.message.match(/execution expired/)
+          if e.message.match(/execution expired/) || e.message.match(/throttle limit exceeded/)
             if would_retry = retry_func.call(e)
               seconds = @sleep_increment * retries
               puts "--[harvest] Execution Expired, sleeping for #{seconds} seconds"
