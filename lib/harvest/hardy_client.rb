@@ -62,12 +62,15 @@ module Harvest
           yield
         rescue Harvest::RateLimited, Harvest::Unavailable => e
           if would_retry = retry_func.call(e)
-            seconds = if e.response.headers["retry-after"]
-              e.response.headers["retry-after"].first.to_i
+            header_wait_time = if e.response.headers["retry-after"]
+              e.response.headers["retry-after"].to_i
             else
-              @sleep_increment * retries
+              120
             end
-            puts "---[harvest] Sleeping for #{seconds} seconds"
+            calc_wait_time = @sleep_increment * retries
+            seconds = [header_wait_time,calc_wait_time].min
+
+            puts "---[harvest] 'limited' Sleeping for #{seconds} seconds"
             sleep(seconds)
             retry
           end
